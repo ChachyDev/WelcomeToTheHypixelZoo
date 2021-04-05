@@ -1,0 +1,72 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "1.0.0"
+group = "club.chachy.zoo"
+archivesBaseName = "hypixelzoo"
+
+minecraft {
+    version = "1.8.9-11.15.1.2318-1.8.9"
+    runDir = "run"
+    clientJvmArgs += ["-Dfml.coreMods.load=club.sk1er.mods.core.tweaker.FMLLoadingPlugin"]
+    mappings = "stable_20"
+}
+
+repositories {
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: '*.jar')
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+task moveResources {
+    doLast {
+        ant.move file: "${buildDir}/resources/main",
+            todir: "${buildDir}/classes/java"
+    }
+}
+
+moveResources.dependsOn processResources
+classes.dependsOn moveResources
+
+jar {
+    manifest {
+        attributes "FMLCorePlugin": "club.sk1er.mods.core.tweaker.FMLLoadingPlugin",
+            "ModSide": "CLIENT",
+            "FMLCorePluginContainsFMLMod": "Yes, yes it does"
+    }
+}
+
+sourceCompatibility = targetCompatibility = 1.8

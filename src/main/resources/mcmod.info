@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "hypixelzoo",
+    "name": "HypixelZoo",
+    "description": "Plays welcome to the Hypixel Zoo when you join Hypixel.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "ChachyDev"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
